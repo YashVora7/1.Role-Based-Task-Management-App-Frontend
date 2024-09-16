@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Task Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-sm mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+    <form id="registerForm">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">email</label>
+        <input type="text" id="email" placeholder="email" class="w-full p-2 border rounded" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+        <input type="password" id="password" placeholder="Password" class="w-full p-2 border rounded" required>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Role</label>
+        <select id="role" class="w-full p-2 border rounded" required>
+          <option value="">Select Role</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Register</button>
+    </form>
+    <p class="text-center mt-4">Already have an account? <a href="login.html" class="text-blue-500">Login here</a></p>
+  </div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+
+      if (!role) {
+        alert('Please select a role');
+        return;
+      }
+
+      // Send a POST request to the backend API
+      const response = await fetch('http://localhost:8080/user/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, role }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Registration successful! Please login.');
+        // Redirect to the login page
+        window.location.href = 'login.html';
+      } else {
+        alert('Registration failed: ' + data.message);
+      }
+    });
+  </script>
+</body>
+</html>
